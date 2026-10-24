@@ -26,10 +26,8 @@ export interface BannerState {
 
 export function resolveBannerState(input: BannerStateInput): BannerState {
 	const isHome = input.page === "home";
-	const visible =
-		input.mode === "banner" &&
-		input.imageCount > 0 &&
-		(input.viewport === "desktop" || isHome);
+	// 子页面不再占用整屏横幅：内容直接从顶部开始，背景改由模糊背景层承担。
+	const visible = input.mode === "banner" && input.imageCount > 0 && isHome;
 
 	const copyMode: BannerCopyMode = !visible
 		? null

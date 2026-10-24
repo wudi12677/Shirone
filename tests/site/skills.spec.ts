@@ -1,8 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { registerPersistentShellSync } from "./feature-page";
 
-const SKILL_COUNT = 21;
-const FRONTEND_COUNT = 8;
+const SKILL_COUNT = 4;
 
 test.describe("技能页", () => {
 	test.beforeEach(async ({ page }) => {
@@ -15,34 +14,18 @@ test.describe("技能页", () => {
 			"data-current-page",
 			"skills",
 		);
-		await expect(page.locator(".page-header__title")).toHaveText("Skills");
+		await expect(page.locator(".page-header__title")).toHaveText("技能");
 		await expect(page.locator(".skills-section__count")).toHaveText(
-			"21 skills",
+			"4 项技能",
 		);
 
-		const typescript = page.locator(".skill-card", { hasText: "TypeScript" });
-		await expect(typescript).toContainText("Expert");
-		await expect(typescript.getByRole("meter")).toHaveAttribute(
+		const vue = page.locator(".skill-card", { hasText: "Vue" });
+		await expect(vue).toContainText("熟悉");
+		await expect(vue.getByRole("meter")).toHaveAttribute(
 			"aria-valuenow",
-			"4",
+			"2",
 		);
-		await expect(
-			typescript.locator(".skill-card__segment--active"),
-		).toHaveCount(4);
-	});
-
-	test("分类 chips 可筛选并再次点击恢复全部", async ({ page }) => {
-		const frontend = page.getByRole("button", {
-			name: "Frontend",
-			exact: true,
-		});
-		await frontend.click();
-		await expect(frontend).toHaveAttribute("aria-pressed", "true");
-		await expect(page.locator(".skill-card")).toHaveCount(FRONTEND_COUNT);
-
-		await frontend.click();
-		await expect(frontend).toHaveAttribute("aria-pressed", "false");
-		await expect(page.locator(".skill-card")).toHaveCount(SKILL_COUNT);
+		await expect(vue.locator(".skill-card__segment--active")).toHaveCount(2);
 	});
 
 	test("侧栏页面过滤与直接加载导航高亮正确", async ({ page }) => {

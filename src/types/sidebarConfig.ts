@@ -114,6 +114,16 @@ export interface StatsWidget {
 	pages?: SidebarPage[];
 }
 
+/** 解压小组件（点击捏破气泡，纯前端交互，无数据依赖） */
+export interface StressWidget {
+	type: "stress";
+	enable: boolean;
+	slot: SidebarWidgetSlot;
+	column?: SidebarColumn;
+	/** 限定显示的页面，省略或空数组表示所有页面 */
+	pages?: SidebarPage[];
+}
+
 /** 月度文章历（有文日填色标记，点击日期展开当日文章） */
 export interface CalendarWidget {
 	type: "calendar";
@@ -152,6 +162,7 @@ export type SidebarWidget =
 	| SeriesWidget
 	| AnnouncementWidget
 	| StatsWidget
+	| StressWidget
 	| CalendarWidget
 	| TocWidget
 	| MusicWidget;

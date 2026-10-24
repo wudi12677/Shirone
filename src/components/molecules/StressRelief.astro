@@ -1,0 +1,23 @@
+---
+/**
+ * 解压小组件（侧栏 widget 外壳）。
+ * 交互视图在 StressReliefView.svelte（client:visible 惰性水合），
+ * 这里只负责统一的 WidgetLayout 标题外壳与 props 透传。
+ */
+import type { StressWidget } from "@/types/sidebarConfig";
+import StressReliefView from "./StressReliefView.svelte";
+import WidgetLayout from "./WidgetLayout.astro";
+
+interface Props {
+	class?: string;
+	style?: string;
+	widget?: StressWidget;
+}
+
+const className = Astro.props.class;
+const style = Astro.props.style;
+---
+
+<WidgetLayout name="解压一下" id="stress-relief" class={className} style={style}>
+	<StressReliefView client:visible />
+</WidgetLayout>

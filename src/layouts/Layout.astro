@@ -273,8 +273,8 @@ const defaultSchemeStyle = createDefaultSchemeStyle();
 		.navbar-hidden { opacity: 0; transform: translateY(-4rem); }
 	}
 	@media (min-width: 1024px) {
-		html[data-wallpaper-mode="banner"] body[data-banner-has-desktop="true"] #main-layout { top: var(--banner-content-top); }
-		html[data-wallpaper-mode="banner"] body[data-banner-has-desktop="true"] #top-row { height: calc(var(--banner-stage-height) - 4.5rem); }
+		html[data-wallpaper-mode="banner"] body[data-current-page="home"][data-banner-has-desktop="true"] #main-layout { top: var(--banner-content-top); }
+		html[data-wallpaper-mode="banner"] body[data-current-page="home"][data-banner-has-desktop="true"] #top-row { height: calc(var(--banner-stage-height) - 4.5rem); }
 	}
 	@media (max-width: 1023.98px) {
 		:root { --banner-stage-height: max(70vh, 28rem); }

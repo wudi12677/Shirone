@@ -21,16 +21,6 @@ export const skillsConfig: SkillsConfig = withUserConfig("skills", {
 			label: "前端",
 			icon: "material-symbols:web-rounded",
 		},
-		{
-			key: "backend",
-			label: "后端",
-			icon: "material-symbols:dns-rounded",
-		},
-		{
-			key: "tooling",
-			label: "工具链",
-			icon: "material-symbols:construction-rounded",
-		},
 	],
 	// disabledNames: [],
 });

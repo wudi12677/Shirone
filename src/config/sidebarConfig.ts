@@ -10,7 +10,7 @@
  *    - "left"：主侧栏在左侧（默认），dual 模式下副栏自动落右侧；
  *    - "right"：主侧栏在右侧，dual 模式下副栏落左侧。
  * 3. widget 属性：
- *    - type：组件类型（"profile" | "music" | "announcement" | "categories" | "tags" | "series" | "stats" | "calendar" | "toc"）；
+ *    - type：组件类型（"profile" | "music" | "announcement" | "categories" | "tags" | "series" | "stats" | "stress" | "calendar" | "toc"）；
  *    - enable：是否启用该 widget；
  *    - slot："top"（固定在顶部）| "sticky"（页面滚动时吸顶跟随）；
  *    - column："primary"（主栏，默认）| "secondary"（副栏，仅在 arrangement: "dual" 时生效）；
@@ -102,6 +102,12 @@ export const sidebarConfig: SidebarConfig = withUserConfig("sidebar", {
 			slot: "top",
 			column: "secondary",
 			pages: ["home", "archive", "categories", "tags"],
+		},
+		{
+			type: "stress",
+			enable: true,
+			slot: "top",
+			column: "secondary",
 		},
 		{ type: "calendar", enable: true, slot: "top", column: "secondary" },
 		{

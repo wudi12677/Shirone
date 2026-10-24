@@ -423,7 +423,16 @@ const initialMobileBanner = page === "home";
 
 	function updateBackdropProgress() {
 		backdropFrame = null;
-		const height = stage?.offsetHeight ?? window.innerHeight;
+		const isHome = document.body.dataset.currentPage === "home";
+		// 子页面没有顶部大图：背景层直接以最大模糊常驻，内容从顶部开始。
+		if (!isHome) {
+			document.documentElement.style.setProperty(
+				"--banner-backdrop-progress",
+				"1",
+			);
+			return;
+		}
+		const height = stage?.offsetHeight || window.innerHeight;
 		const progress = Math.min(
 			1,
 			Math.max(0, window.scrollY / Math.max(height * 0.45, 1)),
@@ -1219,7 +1228,8 @@ const initialMobileBanner = page === "home";
 			overflow: hidden
 			pointer-events: none
 			background: var(--page-bg)
-			opacity: 0
+			opacity: var(--banner-backdrop-progress, 0)
+			transition: opacity var(--m3e-duration-medium) var(--m3e-easing-standard)
 			will-change: opacity
 
 		.banner-backdrop__image
@@ -1244,9 +1254,6 @@ const initialMobileBanner = page === "home";
 
 		:global(body[data-current-page="home"]) .banner-stage__media img
 			filter: unquote("blur(calc(var(--banner-backdrop-progress, 0) * 20px))")
-
-		:global(body[data-current-page="home"]) .banner-backdrop
-			opacity: var(--banner-backdrop-progress, 0)
 
 		:global(html[data-wallpaper-mode="none"]) .banner-backdrop
 			display: none
