@@ -110,7 +110,9 @@ let drawerEl: HTMLElement | undefined = $state();
 	>
 		<div class="site-drawer__brand">
 			<div class="site-drawer__title">{siteConfig.title}</div>
-			<div class="site-drawer__subtitle">{siteConfig.subtitle}</div>
+			{#if siteConfig.subtitle}
+				<div class="site-drawer__subtitle">{siteConfig.subtitle}</div>
+			{/if}
 		</div>
 
 		<nav class="site-drawer__nav" aria-label="Navigation drawer">

@@ -1,7 +1,7 @@
 import rss from "@astrojs/rss";
 import { getFeedPosts } from "@utils/feed";
 import type { APIContext } from "astro";
-import { siteConfig } from "@/config";
+import { profileConfig, siteConfig } from "@/config";
 
 export async function GET(context: APIContext): Promise<Response> {
 	const site = context.site ?? new URL(siteConfig.site);
@@ -9,7 +9,7 @@ export async function GET(context: APIContext): Promise<Response> {
 
 	return rss({
 		title: siteConfig.title,
-		description: siteConfig.subtitle || "No description",
+		description: siteConfig.subtitle || profileConfig.bio || siteConfig.title,
 		site: site.href,
 		items: posts.map((post) => ({
 			title: post.title,

@@ -43,17 +43,22 @@ interface Props {
 let { options, labels }: Props = $props();
 let runtime = $state<MusicRuntime | null>(null);
 const hasInitialTracks = options.playlist.length > 0;
+const requestedIndex = Math.max(0, options.initialIndex ?? 0);
+const initialIndex =
+	hasInitialTracks && requestedIndex < options.playlist.length
+		? requestedIndex
+		: 0;
 const hasMeting =
 	(options.provider === "meting" || options.provider === "mixed") &&
 	Boolean(options.meting?.id);
 
 let snapshot = $state<MusicSnapshot>({
 	playlist: options.playlist,
-	currentIndex: hasInitialTracks ? 0 : -1,
-	currentTrack: options.playlist[0] ?? null,
+	currentIndex: hasInitialTracks ? initialIndex : -1,
+	currentTrack: options.playlist[initialIndex] ?? null,
 	status: "idle",
 	currentTime: 0,
-	duration: options.playlist[0]?.duration ?? 0,
+	duration: options.playlist[initialIndex]?.duration ?? 0,
 	volume: options.defaultVolume,
 	muted: false,
 	mode: options.defaultMode,

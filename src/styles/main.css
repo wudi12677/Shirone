@@ -154,6 +154,29 @@
         pointer-events: none;
         opacity: 0.38;
     }
+
+    /* 首页文章分页：固定在视口底部居中悬浮，不随列表滚动。
+       根元素由页面放在 Swup 容器内、内容动画容器外，保证 fixed 以视口为包含块。 */
+    .m3-page-pagination--fixed {
+        position: fixed;
+        inset-inline: 0;
+        bottom: max(var(--m3e-space-3), env(safe-area-inset-bottom));
+        z-index: 40;
+        width: fit-content;
+        max-width: calc(100vw - var(--m3e-space-6));
+        margin-inline: auto;
+        padding: var(--m3e-space-2);
+        border-radius: var(--shape-corner-full);
+        background: color-mix(in oklab, var(--surface-container-high) 88%, transparent);
+        backdrop-filter: blur(12px);
+        box-shadow: var(--m3e-elevation-2);
+        pointer-events: auto;
+    }
+
+    /* 固定分页悬浮在视口底部，给页面尾部（含移动端页脚）留出不被遮挡的间距 */
+    #main-grid:has(.m3-page-pagination--fixed) {
+        padding-bottom: calc(var(--m3e-space-10) + var(--m3e-space-8) + env(safe-area-inset-bottom));
+    }
 }
 
 .custom-md img, #post-cover img {

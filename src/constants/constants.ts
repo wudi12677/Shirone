@@ -25,7 +25,7 @@ export const TEXTURE_PRESETS = [
 // Banner height unit: vh
 export const BANNER_HEIGHT = 35;
 export const BANNER_HEIGHT_EXTEND = 30;
-export const BANNER_HEIGHT_HOME: number = BANNER_HEIGHT + BANNER_HEIGHT_EXTEND;
+export const BANNER_HEIGHT_HOME: number = 100;
 
 // The height the main panel overlaps the banner, unit: rem
 // Keep a small overlap so the content frame meets the wave edge naturally.

@@ -109,15 +109,20 @@ export function createMusicRuntime(
 		dependencies.fetch ?? (typeof fetch !== "undefined" ? fetch : undefined);
 
 	const hasInitialTracks = currentPlaylist.length > 0;
+	const requestedIndex = Math.max(0, options.initialIndex ?? 0);
+	const initialIndex =
+		hasInitialTracks && requestedIndex < currentPlaylist.length
+			? requestedIndex
+			: 0;
 	const hasMeting =
 		(options.provider === "meting" || options.provider === "mixed") &&
 		Boolean(options.meting?.id);
 
 	let state: RuntimeState = {
-		currentIndex: hasInitialTracks ? 0 : -1,
+		currentIndex: hasInitialTracks ? initialIndex : -1,
 		status: "idle",
 		currentTime: 0,
-		duration: currentPlaylist[0]?.duration ?? 0,
+		duration: currentPlaylist[initialIndex]?.duration ?? 0,
 		volume: clampMusicVolume(options.defaultVolume),
 		muted: false,
 		mode: options.defaultMode,

@@ -51,7 +51,7 @@ export const commentConfig: CommentConfig = withUserConfig("comment", {
 		/** 评论语言："auto"（跟随站点）| "zh-CN" | "zh-TW" | "en" | "ja" 等 */
 		lang: "auto",
 		/** 评论输入框占位提示文本 */
-		placeholder: "Share your thoughts...",
+		placeholder: "说说你的想法……",
 	},
 	/** Giscus 专有配置（基于 GitHub Discussions，评论数据存储在公开仓库中） */
 	giscus: {
@@ -95,7 +95,7 @@ export const commentConfig: CommentConfig = withUserConfig("comment", {
 		/** 可选文案覆盖；省略的字段使用 Waline 当前语言默认值 */
 		locale: {
 			/** 评论输入框提示；空字符串不显示提示 */
-			placeholder: "Share your thoughts...",
+			placeholder: "说说你的想法……",
 		},
 		/** false 关闭表情，true 使用默认表情；也可混合填写预设 URL 与自定义表情对象 */
 		emoji: true,

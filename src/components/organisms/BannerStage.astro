@@ -264,6 +264,18 @@ const initialMobileBanner = page === "home";
 	{siteConfig.banner.waves.enable && <BannerWaves />}
 </section>
 
+<!-- 首屏之后的固定模糊背景：仅在首页滚过首屏后淡入，图片跟随当前横幅 -->
+<div class="banner-backdrop" aria-hidden="true">
+	<img
+		class="banner-backdrop__image"
+		src={initialSrc || undefined}
+		alt=""
+		decoding="async"
+		data-banner-backdrop-image
+	/>
+	<span class="banner-backdrop__veil"></span>
+</div>
+
 <script>
 	import { resolveBannerState, type BannerViewport } from "@utils/banner-state";
 	import {
@@ -391,6 +403,40 @@ const initialMobileBanner = page === "home";
 		return window.matchMedia("(min-width: 1024px)").matches
 			? "desktop"
 			: "mobile";
+	}
+
+	const backdropImage = document.querySelector<HTMLImageElement>(
+		"[data-banner-backdrop-image]",
+	);
+
+	/** 让固定模糊背景跟随当前可见的横幅图层（轮播切图后同步）。 */
+	function syncBackdrop() {
+		if (!backdropImage) return;
+		const layer = layers[runtime.activeLayer];
+		const src = layer?.currentSrc || layer?.src;
+		if (!src) return;
+		if (backdropImage.src !== src) backdropImage.src = src;
+	}
+
+	// 背景模糊程度随滚动条位置逐步变化：首屏为 0（清晰），越往下越模糊。
+	let backdropFrame: number | null = null;
+
+	function updateBackdropProgress() {
+		backdropFrame = null;
+		const height = stage?.offsetHeight ?? window.innerHeight;
+		const progress = Math.min(
+			1,
+			Math.max(0, window.scrollY / Math.max(height * 0.45, 1)),
+		);
+		document.documentElement.style.setProperty(
+			"--banner-backdrop-progress",
+			progress.toFixed(3),
+		);
+	}
+
+	function scheduleBackdropProgress() {
+		if (backdropFrame !== null) return;
+		backdropFrame = window.requestAnimationFrame(updateBackdropProgress);
 	}
 
 	function stopRotation() {
@@ -942,6 +988,8 @@ const initialMobileBanner = page === "home";
 		if (copyMode === "home") startSubtitleTyping(page);
 		else stopSubtitleTyping();
 
+		syncBackdrop();
+
 		if (!state.visible || !state.assetGroup) {
 			stopRotation();
 			stopLayerMotions();
@@ -969,6 +1017,7 @@ const initialMobileBanner = page === "home";
 		runtime.navigationSyncFrame = window.requestAnimationFrame(() => {
 			runtime.navigationSyncFrame = null;
 			syncBanner();
+			scheduleBackdropProgress();
 			if (animateIn) animateContextIn();
 		});
 	}
@@ -984,6 +1033,8 @@ const initialMobileBanner = page === "home";
 					scheduleContextTitleFit();
 				}
 			});
+			window.addEventListener("scroll", scheduleBackdropProgress, { passive: true });
+			scheduleBackdropProgress();
 			window.matchMedia("(min-width: 1024px)").addEventListener("change", () => syncBanner());
 				window.matchMedia("(prefers-reduced-motion: reduce)").addEventListener("change", () => {
 					if (prefersReducedMotion()) {
@@ -1159,6 +1210,47 @@ const initialMobileBanner = page === "home";
 			display: flex
 
 
+		/* 首屏之后的固定模糊背景：随滚动进度 0→1 逐步加深模糊并淡入，
+		   让下拉后的页面背景延续横幅色调而不是突然变成纯色。 */
+		.banner-backdrop
+			position: fixed
+			inset: 0
+			z-index: -1
+			overflow: hidden
+			pointer-events: none
+			background: var(--page-bg)
+			opacity: 0
+			will-change: opacity
+
+		.banner-backdrop__image
+			position: absolute
+			inset: -8%
+			width: 116%
+			height: 116%
+			object-fit: cover
+			filter: unquote("blur(calc(var(--banner-backdrop-progress, 0) * 52px)) saturate(1.25)")
+			transform: unquote("scale(calc(1.02 + var(--banner-backdrop-progress, 0) * 0.05))")
+			opacity: 0.9
+
+		.banner-backdrop__veil
+			position: absolute
+			inset: 0
+			background: unquote("linear-gradient(to bottom, color-mix(in oklab, var(--page-bg) 18%, transparent), color-mix(in oklab, var(--page-bg) 66%, transparent) 55%, color-mix(in oklab, var(--page-bg) 92%, transparent))")
+
+		/* 首页横幅本身随滚动逐渐模糊：滚动越多越糊，滚回顶部恢复清晰 */
+		:global(body[data-current-page="home"]) .banner-stage__media
+			transform: unquote("scale(calc(1 + var(--banner-backdrop-progress, 0) * 0.1))")
+			transform-origin: center center
+
+		:global(body[data-current-page="home"]) .banner-stage__media img
+			filter: unquote("blur(calc(var(--banner-backdrop-progress, 0) * 20px))")
+
+		:global(body[data-current-page="home"]) .banner-backdrop
+			opacity: var(--banner-backdrop-progress, 0)
+
+		:global(html[data-wallpaper-mode="none"]) .banner-backdrop
+			display: none
+
 	:global(html[data-wallpaper-mode="none"]) .banner-stage
 		display: none
 
@@ -1192,3 +1284,9 @@ const initialMobileBanner = page === "home";
 			transition: none
 			animation: none
 </style>
+
+<script>
+	import { applyBannerHue } from "@utils/banner-color";
+
+	applyBannerHue();
+</script>

@@ -45,4 +45,11 @@ export const musicTracks: readonly TrackDescriptor[] = [
 		source: "/assets/music/url/cl.mp3",
 		duration: 242,
 	},
+	{
+		id: "dont-say-lazy",
+		title: "Don't say lazy",
+		artist: "放課後ティータイム",
+		cover: "assets/images/music/dont-say-lazy.webp",
+		source: "/assets/music/url/dont-say-lazy.mp3",
+	},
 ];

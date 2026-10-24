@@ -67,6 +67,8 @@ export interface MusicConfig {
 	readonly defaultVolume: number;
 	/** 初始播放模式 */
 	readonly defaultMode: PlaybackMode;
+	/** 初始展示的曲目 id（未命中时回退第一首） */
+	readonly defaultTrackId?: string;
 }
 
 export interface MusicSnapshot {

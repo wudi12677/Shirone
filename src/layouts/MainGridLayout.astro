@@ -108,6 +108,9 @@ const mainContentClasses = generateMainContentClasses(sidebarResponsive);
                             <Footer></Footer>
                         </div>
                     </div>
+                    <!-- 页面级分页等视口固定元素放在 Swup 容器内、内容动画容器外，
+                         避免祖先 transform 改变 fixed 的包含块；Swup 换页时随容器一起替换 -->
+                    <slot name="pagination"></slot>
                 </main>
             </div>
 

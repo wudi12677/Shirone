@@ -62,23 +62,11 @@ export const LinkPresets: Record<string, NavBarLink> = {
 		icon: "material-symbols:live-tv-outline-rounded",
 		pageKey: "anime",
 	},
-	Compass: {
-		name: i18n(I18nKey.compass),
-		url: "/compass/",
-		icon: "material-symbols:explore-rounded",
-		pageKey: "compass",
-	},
 	Skills: {
 		name: i18n(I18nKey.skills),
 		url: "/skills/",
 		icon: "material-symbols:workspaces-outline-rounded",
 		pageKey: "skills",
-	},
-	Projects: {
-		name: i18n(I18nKey.projects),
-		url: "/projects/",
-		icon: "material-symbols:deployed-code-outline-rounded",
-		pageKey: "projects",
 	},
 	Devices: {
 		name: i18n(I18nKey.devices),
@@ -144,14 +132,12 @@ const defaultNavBarConfig: NavBarConfig = {
 		LinkPresets.Friends,
 		LinkPresets.Moments,
 		LinkPresets.Anime,
-		LinkPresets.Compass,
 		LinkPresets.Albums,
 		{
 			name: i18n(I18nKey.more),
 			icon: "material-symbols:apps-rounded",
 			children: [
 				LinkPresets.Timeline,
-				LinkPresets.Projects,
 				LinkPresets.Devices,
 				LinkPresets.Games,
 				LinkPresets.Skills,

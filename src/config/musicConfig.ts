@@ -71,6 +71,8 @@ export const musicConfig: MusicConfig = withUserConfig("music", {
 	},
 	defaultVolume: 0.7,
 	defaultMode: "sequence",
+	// 初始选中的曲目（未命中时回退第一首）
+	defaultTrackId: "dont-say-lazy",
 });
 
 export interface ResolvedMusicOptions {
@@ -79,6 +81,8 @@ export interface ResolvedMusicOptions {
 	readonly meting?: MetingMusicConfig;
 	readonly defaultVolume: number;
 	readonly defaultMode: PlaybackMode;
+	/** 初始化时选中的曲目下标（默认 0） */
+	readonly initialIndex?: number;
 }
 
 const ABSOLUTE_MEDIA_SOURCE = /^(?:https?:)?\/\//i;
@@ -131,6 +135,16 @@ function resolveMetingConfig(
 	return Object.freeze({ ...meting, preload: meting.preload ?? "none" });
 }
 
+/** 按 defaultTrackId 定位初始曲目；未命中（或未配置）时回退第一首。 */
+function resolveInitialIndex(
+	playlist: readonly TrackDescriptor[],
+	defaultTrackId: string | undefined,
+): number {
+	if (!defaultTrackId) return 0;
+	const index = playlist.findIndex((track) => track.id === defaultTrackId.trim());
+	return index >= 0 ? index : 0;
+}
+
 export function resolveMusicOptions(
 	config: MusicConfig,
 ): ResolvedMusicOptions | null {
@@ -147,6 +161,7 @@ export function resolveMusicOptions(
 			meting: resolveMetingConfig(config.meting),
 			defaultVolume: clampMusicVolume(config.defaultVolume),
 			defaultMode: config.defaultMode,
+			initialIndex: 0,
 		});
 	}
 
@@ -171,6 +186,7 @@ export function resolveMusicOptions(
 			meting: resolveMetingConfig(config.meting),
 			defaultVolume: clampMusicVolume(config.defaultVolume),
 			defaultMode: config.defaultMode,
+			initialIndex: resolveInitialIndex(playlist, config.defaultTrackId),
 		});
 	}
 
@@ -181,5 +197,6 @@ export function resolveMusicOptions(
 		playlist: Object.freeze(playlist),
 		defaultVolume: clampMusicVolume(config.defaultVolume),
 		defaultMode: config.defaultMode,
+		initialIndex: resolveInitialIndex(playlist, config.defaultTrackId),
 	});
 }

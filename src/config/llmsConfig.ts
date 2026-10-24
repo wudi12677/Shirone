@@ -94,19 +94,19 @@ export const llmsConfig: LlmsConfig = withUserConfig("llms", {
 	 */
 	corePages: [
 		{
-			title: "Home",
+			title: "首页",
 			url: "/",
-			description: "Main blog entrance and latest post stream.",
+			description: "博客主入口与最新文章列表。",
 		},
 		{
-			title: "About",
+			title: "关于",
 			url: "/about/",
-			description: "Author profile, technical stack, and background.",
+			description: "作者资料、技术栈与个人背景。",
 		},
 		{
-			title: "Archive",
+			title: "归档",
 			url: "/archive/",
-			description: "Chronological index of all published writings.",
+			description: "按时间顺序排列的全部文章索引。",
 		},
 	],
 

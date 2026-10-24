@@ -110,6 +110,8 @@ export type SiteConfig = {
 		fixed: boolean;
 		style: string;
 		spec: string;
+		/** 是否从横幅图片自动提取主色相作为默认色相（访客手动调色仍即时生效） */
+		extractFromBanner?: boolean;
 	};
 	wallpaperMode: {
 		defaultMode: WallpaperMode;
