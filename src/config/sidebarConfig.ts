@@ -14,6 +14,7 @@
  *    - enable：是否启用该 widget；
  *    - slot："top"（固定在顶部）| "sticky"（页面滚动时吸顶跟随）；
  *    - column："primary"（主栏，默认）| "secondary"（副栏，仅在 arrangement: "dual" 时生效）；
+ *      注意：副栏在 1280px 以下整列隐藏，放在副栏的 widget 在手机/平板上不可见；
  *    - pages：仅在指定页面展示（如 ["home", "post"]，省略时默认全页面展示）；
  *    - collapseAfter：折叠阈值（适用于 categories/tags/series，超出条数显示展开按钮）。
  *
@@ -30,6 +31,9 @@ export const sidebarConfig: SidebarConfig = withUserConfig("sidebar", {
 		{ type: "profile", enable: true, slot: "top" },
 		{ type: "music", enable: true, slot: "top" },
 		{ type: "announcement", enable: true, slot: "top", pages: ["home"] },
+		// 主栏（primary）在手机/平板上堆叠在内容下方，桌面端位于左侧；
+		// 放副栏会在 1280px 以下整列隐藏，因此这里保持在主栏。
+		{ type: "stress", enable: true, slot: "top" },
 		{
 			type: "categories",
 			enable: true,
@@ -102,12 +106,6 @@ export const sidebarConfig: SidebarConfig = withUserConfig("sidebar", {
 			slot: "top",
 			column: "secondary",
 			pages: ["home", "archive", "categories", "tags"],
-		},
-		{
-			type: "stress",
-			enable: true,
-			slot: "top",
-			column: "secondary",
 		},
 		{ type: "calendar", enable: true, slot: "top", column: "secondary" },
 		{
