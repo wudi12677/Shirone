@@ -12,7 +12,7 @@ export const GET: APIRoute = async (context: APIContext) => {
 	const siteUrl = (
 		context.site?.href ??
 		siteConfig.site ??
-		"https://shirone.vercel.app"
+		"https://zwbg1.me"
 	).replace(/\/$/, "");
 	const allPosts = await getSortedPosts();
 

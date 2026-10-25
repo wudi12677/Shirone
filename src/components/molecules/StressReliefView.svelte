@@ -9,9 +9,43 @@ let popped = $state<boolean[]>(Array.from({ length: TOTAL }, () => false));
 const count = $derived(popped.filter(Boolean).length);
 const done = $derived(count === TOTAL);
 
+/** 首次点击时才创建，避免无交互时的音频资源占用。 */
+let audioContext: AudioContext | null = null;
+
+/** 合成一声短促的「啵」，不依赖任何音频文件。 */
+function playPop(): void {
+	const AudioContextCtor =
+		window.AudioContext ??
+		(window as Window & { webkitAudioContext?: typeof AudioContext })
+			.webkitAudioContext;
+	if (!AudioContextCtor) return;
+
+	audioContext ??= new AudioContextCtor();
+	if (audioContext.state === "suspended") void audioContext.resume();
+
+	const now = audioContext.currentTime;
+	const oscillator = audioContext.createOscillator();
+	const gain = audioContext.createGain();
+	oscillator.type = "sine";
+	oscillator.frequency.setValueAtTime(720, now);
+	oscillator.frequency.exponentialRampToValueAtTime(180, now + 0.09);
+	gain.gain.setValueAtTime(0.0001, now);
+	gain.gain.exponentialRampToValueAtTime(0.14, now + 0.008);
+	gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.12);
+	oscillator.connect(gain).connect(audioContext.destination);
+	oscillator.start(now);
+	oscillator.stop(now + 0.13);
+	oscillator.addEventListener("ended", () => {
+		oscillator.disconnect();
+		gain.disconnect();
+	});
+}
+
 function pop(index: number): void {
 	if (popped[index]) return;
 	popped[index] = true;
+	playPop();
+	navigator.vibrate?.(12);
 }
 
 function reset(): void {
