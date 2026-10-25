@@ -48,16 +48,21 @@ describe("Feature Data & Resolver Tests", () => {
 	});
 
 	it("resolveTimelineData applies disabledTitles and order correctly", () => {
+		const customItems = [
+			{ title: "Older", date: "2020.09" },
+			{ title: "Newer", date: "2025.03" },
+		];
 		const config = {
 			enable: true,
 			categories: [],
 			order: "asc",
-			disabledTitles: ["Senior Frontend Engineer"],
+			disabledTitles: ["Newer"],
 		};
-		const resolved = resolveTimelineData(config);
-		assert.ok(!resolved.some((t) => t.title === "Senior Frontend Engineer"));
-		// timelineData 中最旧的条目是 2020.09 – 2024.06 (Computer Science & Engineering Degree)
-		assert.equal(resolved[0].title, "Computer Science & Engineering Degree");
+		const resolved = resolveTimelineData(config, customItems);
+		assert.deepEqual(
+			resolved.map((t) => t.title),
+			["Older"],
+		);
 	});
 
 	it("resolveTimelineData sorts correctly by date in desc and asc order", () => {
